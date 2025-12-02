@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node / dev
+node_modules/
+dist/
+build/
+
+# IDEs
+.vscode/
+*.log
+
+# media large (si no quieres subir videos pesados)
+*.mp4
