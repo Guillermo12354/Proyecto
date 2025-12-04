@@ -9,7 +9,7 @@ root.resizable(False, False)
 # ==== VARIABLES DEL JUEGO ====
 jugadores = ["Jugador 1", "Jugador 2"]
 turno = 0
-puntos = [5, 5]  # cada jugador inicia con 5 fichas
+puntos = [5, 5]
 
 opciones = [
     "Toma 1",
@@ -30,7 +30,7 @@ lbl_puntos.pack(pady=5)
 lbl_resultado = tk.Label(root, text="", font=("Arial", 18))
 lbl_resultado.pack(pady=15)
 
-btn_girar = tk.Button(root, text="Girar Pirinola", font=("Arial", 12), command=lambda: girar())
+btn_girar = tk.Button(root, text="Girar Pirinola", font=("Arial", 12))
 btn_girar.pack(pady=10)
 
 lbl_mensaje = tk.Label(root, text="", font=("Arial", 10), fg="blue")
@@ -38,27 +38,37 @@ lbl_mensaje.pack(pady=10)
 
 
 def actualizar_tablero(mensaje=""):
-    """Actualiza el texto en pantalla"""
     lbl_turno.config(text=f"Turno de: {jugadores[turno]}")
     lbl_puntos.config(text=f"{jugadores[0]}: {puntos[0]} puntos   |   {jugadores[1]}: {puntos[1]} puntos")
     lbl_mensaje.config(text=mensaje)
 
 
 def verificar_ganador():
-    """Revisa si un jugador ganó"""
-    if puntos[0] <= 0:
+    # EMPATE
+    if puntos[0] == 0 and puntos[1] == 0:
+        lbl_resultado.config(text="Empate")
+        btn_girar.config(state="disabled")
+        reiniciar()
+        return True
+
+    # GANADORES normales
+    if puntos[0] == 0:
         lbl_resultado.config(text="Ganó Jugador 2 🎉")
+        btn_girar.config(state="disabled")
         reiniciar()
         return True
-    elif puntos[1] <= 0:
+
+    if puntos[1] == 0:
         lbl_resultado.config(text="Ganó Jugador 1 🎉")
+        btn_girar.config(state="disabled")
         reiniciar()
         return True
+
     return False
 
 
 def reiniciar():
-    """Reinicia el juego automáticamente después de 3 sec"""
+    # Reinicio suave sin parpadeos
     root.after(3000, nuevo_juego)
 
 
@@ -67,12 +77,15 @@ def nuevo_juego():
     puntos = [5, 5]
     turno = 0
     lbl_resultado.config(text="")
+    btn_girar.config(state="normal")
     actualizar_tablero("Nuevo juego iniciado.")
 
 
 def girar():
-    """Aplica efecto de pirinola"""
     global turno, puntos
+
+    # Bloquear botón para evitar doble clic (evitara acciines inecesarias)
+    btn_girar.config(state="disabled")
 
     resultado = random.choice(opciones)
     lbl_resultado.config(text=resultado)
@@ -80,7 +93,7 @@ def girar():
     jugador = turno
     otro = 1 - turno
 
-    # ===== EFECTOS =====
+    # EFECTOS
     if resultado == "Toma 1":
         puntos[jugador] += 1
 
@@ -88,31 +101,33 @@ def girar():
         puntos[jugador] += 2
 
     elif resultado == "Pon 1":
-        puntos[jugador] -= 1
+        puntos[jugador] = max(0, puntos[jugador] - 1)
 
     elif resultado == "Pon 2":
-        puntos[jugador] -= 2
+        puntos[jugador] = max(0, puntos[jugador] - 2)
 
     elif resultado == "Todos ponen":
-        puntos[0] -= 1
-        puntos[1] -= 1
+        puntos[0] = max(0, puntos[0] - 1)
+        puntos[1] = max(0, puntos[1] - 1)
 
     elif resultado == "Toma todo":
         puntos[jugador] += puntos[otro]
         puntos[otro] = 0
 
-    # Evitar puntos negativos
-    puntos[0] = max(0, puntos[0])
-    puntos[1] = max(0, puntos[1])
-
     # ¿Ya hay ganador?
     if verificar_ganador():
         return
 
-    # Cambiar turno
+    # CAMBIO DE TURNO (solo si el juego sigue)
     turno = 1 - turno
-    actualizar_tablero()
+    actualizar_tablero("Turno cambiado.")
 
+    # Rehabilitar botón otra vez
+    btn_girar.config(state="normal")
+
+
+# Enlazar botón 
+btn_girar.config(command=girar)
 
 # Iniciar tablero
 actualizar_tablero()
