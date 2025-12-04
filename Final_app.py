@@ -7,8 +7,10 @@ import os
 
 root = tk.Tk()
 root.title("MultiApp - Menú Principal")
-root.geometry("400x500")
+root.geometry("400x550")
 root.resizable(False, False)
+
+# ----------- FUNCIONES PARA CAMBIAR DE INTERFAZ -----------
 
 def abrir_menu():
     frame_areas.pack_forget()
@@ -26,6 +28,8 @@ def abrir_calculadora_normal():
     frame_calc.pack(fill="both", expand=True)
 
 
+# ----------- ABRIR PROGRAMAS EXTERNOS -----------
+
 def abrir_carreras():
     archivo = os.path.join(os.getcwd(), "carreras_turtle.py")
     subprocess.Popen([sys.executable, archivo])
@@ -34,27 +38,37 @@ def abrir_laberinto():
     archivo = os.path.join(os.getcwd(), "laberinto_turtle.py")
     subprocess.Popen([sys.executable, archivo])
 
+def abrir_pirinola():
+    archivo = os.path.join(os.getcwd(), "pirinola_gui.py")
+    subprocess.Popen([sys.executable, archivo])
+
+def abrir_slot_emoji():
+    archivo = os.path.join(os.getcwd(), "slot_emoji_gui.py")
+    subprocess.Popen([sys.executable, archivo])
+
+def abrir_dado():
+    archivo = os.path.join(os.getcwd(), "dado_gui.py")
+    subprocess.Popen([sys.executable, archivo])
+
+# ---------------- MENÚ PRINCIPAL -----------------
 
 frame_menu = tk.Frame(root)
 
 titulo = tk.Label(frame_menu, text="MENÚ PRINCIPAL", font=("Arial", 18))
 titulo.pack(pady=20)
 
-btn1 = ttk.Button(frame_menu, text="Calculadora de Áreas", width=30, command=abrir_calculadora_areas)
-btn1.pack(pady=10)
-
-btn2 = ttk.Button(frame_menu, text="Calculadora Normal", width=30, command=abrir_calculadora_normal)
-btn2.pack(pady=10)
-
-btn3 = ttk.Button(frame_menu, text="Juego de Carreras", width=30, command=abrir_carreras)
-btn3.pack(pady=10)
-
-btn4 = ttk.Button(frame_menu, text="Laberinto", width=30, command=abrir_laberinto)
-btn4.pack(pady=10)
+ttk.Button(frame_menu, text="Calculadora de Áreas", width=30, command=abrir_calculadora_areas).pack(pady=5)
+ttk.Button(frame_menu, text="Calculadora Normal", width=30, command=abrir_calculadora_normal).pack(pady=5)
+ttk.Button(frame_menu, text="Juego de Carreras", width=30, command=abrir_carreras).pack(pady=5)
+ttk.Button(frame_menu, text="Laberinto", width=30, command=abrir_laberinto).pack(pady=5)
+ttk.Button(frame_menu, text="Pirinola", width=30, command=abrir_pirinola).pack(pady=5)
+ttk.Button(frame_menu, text="Slot Emoji", width=30, command=abrir_slot_emoji).pack(pady=5)
+ttk.Button(frame_menu, text="Juego del Dado", width=30, command=abrir_dado).pack(pady=5)
 
 frame_menu.pack(fill="both", expand=True)
 
 
+# ---------------- Calculadora de Áreas -------------------
 
 frame_areas = tk.Frame(root)
 
@@ -122,9 +136,10 @@ def actualizar_inputs(*args):
 
 combo_fig.bind("<<ComboboxSelected>>", actualizar_inputs)
 
-btn_regresar_areas = ttk.Button(frame_areas, text="Volver al menú", command=abrir_menu)
-btn_regresar_areas.pack(pady=20)
+ttk.Button(frame_areas, text="Volver al menú", command=abrir_menu).pack(pady=20)
 
+
+# ---------------- Calculadora Normal -------------------
 
 frame_calc = tk.Frame(root)
 
@@ -167,8 +182,6 @@ def dividir():
     else:
         label_calc_res.config(text=f"Resultado: {a/b}")
 
-# BOTONES
-
 frame_botones_calc = tk.Frame(frame_calc)
 frame_botones_calc.pack(pady=10)
 
@@ -179,5 +192,5 @@ ttk.Button(frame_botones_calc, text="Dividir", width=12, command=dividir).grid(r
 
 ttk.Button(frame_calc, text="Volver al menú", command=abrir_menu).pack(pady=20)
 
-
+# -------- MAIN LOOP ----------
 root.mainloop()
