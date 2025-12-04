@@ -30,25 +30,27 @@ def abrir_calculadora_normal():
 
 # ----------- ABRIR PROGRAMAS EXTERNOS -----------
 
-def abrir_carreras():
-    archivo = os.path.join(os.getcwd(), "carreras_turtle.py")
-    subprocess.Popen([sys.executable, archivo])
+def ejecutar_programa(nombre_archivo):
+    ruta = os.path.join(os.path.dirname(__file__), nombre_archivo)
+    if os.path.exists(ruta):
+        subprocess.Popen([sys.executable, ruta])
+    else:
+        print("ERROR: No se encontró", ruta)
 
-def abrir_laberinto():
-    archivo = os.path.join(os.getcwd(), "laberinto_turtle.py")
-    subprocess.Popen([sys.executable, archivo])
+def abrir_carreras():
+    ejecutar_programa("carreras_turtle.py")
 
 def abrir_pirinola():
-    archivo = os.path.join(os.getcwd(), "pirinola_gui.py")
-    subprocess.Popen([sys.executable, archivo])
+    ejecutar_programa("pirinola_gui.py")
 
 def abrir_slot_emoji():
-    archivo = os.path.join(os.getcwd(), "slot_emoji_gui.py")
-    subprocess.Popen([sys.executable, archivo])
+    ejecutar_programa("slot_emoji_gui.py")
+
+def abrir_laberinto():
+    ejecutar_programa("laberinto_turtle.py")
 
 def abrir_dado():
-    archivo = os.path.join(os.getcwd(), "dado_gui.py")
-    subprocess.Popen([sys.executable, archivo])
+    ejecutar_programa("dado_gui.py")
 
 # ---------------- MENÚ PRINCIPAL -----------------
 
